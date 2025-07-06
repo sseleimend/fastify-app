@@ -30,6 +30,7 @@ try {
   await fastify.register(await import("@fastify/env"), options);
   await fastify.register(await import("@fastify/cors"));
   await fastify.register(await import("@fastify/sensible"));
+  await fastify.register(await import("./plugins/mongodb.js"));
 
   fastify.get("/", (request, reply) => {
     reply.send({ hello: "world" });
