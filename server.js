@@ -31,6 +31,9 @@ try {
   await fastify.register(await import("@fastify/cors"));
   await fastify.register(await import("@fastify/sensible"));
   await fastify.register(await import("./plugins/mongodb.js"));
+  fastify.register(await import("fastify-bcrypt"), {
+    saltWorkFactor: 12,
+  });
 
   fastify.get("/test-db", async (request, reply) => {
     try {
