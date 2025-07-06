@@ -1,5 +1,6 @@
-import path from "path";
+import path, { dirname } from "path";
 import Fastify from "fastify";
+import { fileURLToPath } from "url";
 
 const fastify = Fastify({ logger: true });
 
@@ -35,9 +36,17 @@ try {
     saltWorkFactor: 12,
   });
   await fastify.register(await import("./plugins/jwt.js"));
+  await fastify.register(await import("@fastify/multipart"));
+  await fastify.register(await import("@fastify/static"), {
+    root: path.join(dirname(fileURLToPath(import.meta.url)), "uploads"),
+    prefix: "/uploads/",
+  });
 
   await fastify.register(await import("./routes/auth.js"), {
     prefix: "/api/auth",
+  });
+  await fastify.register(await import("./routes/thumbnail.js"), {
+    prefix: "/api/thumbnail",
   });
 
   fastify.get("/test-db", async (request, reply) => {
