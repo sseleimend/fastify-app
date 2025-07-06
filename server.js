@@ -34,6 +34,9 @@ try {
   fastify.register(await import("fastify-bcrypt"), {
     saltWorkFactor: 12,
   });
+  fastify.register(await import("@fastify/jwt"), {
+    secret: fastify.config.JWT_SECRET,
+  });
 
   fastify.get("/test-db", async (request, reply) => {
     try {
