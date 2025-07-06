@@ -11,16 +11,17 @@ export default function (fastify, opts) {
     signup(fastify, request, reply)
   );
   fastify.post("/login", (request, reply) => login(fastify, request, reply));
-  fastify.post(
-    "/forgot-password",
-    forgotPassword(request, reply) => (fastify, request, reply)
+  fastify.post("/forgot-password", (request, reply) =>
+    forgotPassword(fastify, request, reply)
   );
   fastify.post("/reset-password/:token", (request, reply) =>
     resetPassword(fastify, request, reply)
   );
-  fastify.post("/logout",{
-    preHandler: [fastify.authenticate]
-  } , (request, reply) =>
-    logout(fastify, request, reply)
+  fastify.post(
+    "/logout",
+    {
+      preHandler: [fastify.authenticate],
+    },
+    (request, reply) => logout(fastify, request, reply)
   );
 }
