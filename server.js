@@ -31,11 +31,13 @@ try {
   await fastify.register(await import("@fastify/cors"));
   await fastify.register(await import("@fastify/sensible"));
   await fastify.register(await import("./plugins/mongodb.js"));
-  fastify.register(await import("fastify-bcrypt"), {
+  await fastify.register(await import("fastify-bcrypt"), {
     saltWorkFactor: 12,
   });
-  fastify.register(await import("@fastify/jwt"), {
-    secret: fastify.config.JWT_SECRET,
+  await fastify.register(await import("./plugins/jwt.js"));
+
+  await fastify.register(await import("./routes/auth.js"), {
+    prefix: "/api/auth",
   });
 
   fastify.get("/test-db", async (request, reply) => {
