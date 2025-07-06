@@ -32,6 +32,37 @@ try {
   await fastify.register(await import("@fastify/sensible"));
   await fastify.register(await import("./plugins/mongodb.js"));
 
+  fastify.get("/test-db", async (request, reply) => {
+    try {
+      const connectionState = fastify.mongoose.connection.readyState;
+      let status = "";
+
+      switch (connectionState) {
+        case 0:
+          status = "disconnected";
+          break;
+        case 1:
+          status = "connected";
+          break;
+        case 2:
+          status = "connecting";
+          break;
+        case 3:
+          status = "disconnecting";
+          break;
+        default:
+          status = "unknown";
+      }
+      reply.send({ database: status });
+    } catch (error) {
+      fastify.log.error(error);
+      reply.status(500).send({
+        error: "Failed to test database",
+      });
+      process.exit(1);
+    }
+  });
+
   fastify.get("/", (request, reply) => {
     reply.send({ hello: "world" });
   });
